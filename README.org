@@ -1,0 +1,4 @@
+* A path through the standardized ladder of functional programming
+
+  Notes and exercises about the topics mentioned in [[https://news.ycombinator.com/item?id=13067741][Standardized Ladder of
+  Functional Programming]].
