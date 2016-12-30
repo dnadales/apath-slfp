@@ -1,5 +1,9 @@
 {-# LANGUAGE GADTs #-}
 -- | Simple embedded DSL using GADT's.
+--
+-- Example adapted from:
+--
+--  https://en.wikibooks.org/wiki/Haskell/GADT
 
 module ExprDSLGADTs where
 
