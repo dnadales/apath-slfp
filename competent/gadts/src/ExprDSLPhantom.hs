@@ -11,6 +11,9 @@ data Expr a = I Int
             | Add (Expr a) (Expr a)
             | Eq (Expr a) (Expr a)
 
+eRight = (I 5 `Add` I 1) `Eq` I 7
+eWrong = (B True) `Add` I 5
+
 -- | What if we trued to define the 'eval' expression with this type?
 --
 -- > eval :: Expr a -> Either Int Bool
