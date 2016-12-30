@@ -30,3 +30,20 @@ data GRoseTree a where
 
 -- | When working with GADT's it is useful to think of constructors as
 -- functions.
+
+-- | So far in this file we haven't seen anything we cannot do without GADT's:
+-- functions for constructor 'Foo a' have 'Foo a' has its return type. GADT's
+-- let us control the type of 'Foo' we return (how 'a' gets instantiated).
+--
+-- Now consider:
+--
+data TrueGadtFoo a where
+  MkTrueGadtFoo :: a -> TrueGadtFoo Int
+
+-- This has no Haskell 98 equivalent.
+
+-- | And remember that you must return the same datatype you're defining!
+--
+-- > data Foo where
+-- >  MkFoo :: Bar Int-- This will not typecheck
+--
