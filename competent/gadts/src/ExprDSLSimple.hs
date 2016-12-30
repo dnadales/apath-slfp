@@ -1,6 +1,6 @@
 -- | Simple embedded DSL for simple Boolean expresions.
 --
--- Example taken from
+-- Example taken from:
 --
 --  https://en.wikibooks.org/wiki/Haskell/GADT
 
