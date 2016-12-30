@@ -8,7 +8,7 @@ data Expr a where
   I :: Int -> Expr Int
   B :: Bool -> Expr Bool
   Add :: Expr Int -> Expr Int -> Expr Int
-  Eq :: Expr a -> Expr a -> Expr a
+  Eq :: (Eq a) => Expr a -> Expr a -> Expr Bool
 
 eRight = (I 5 `Add` I 1) `Eq` I 7
 
@@ -18,3 +18,10 @@ eRight = (I 5 `Add` I 1) `Eq` I 7
 -- > eWrong = (B True) `Add` I 5 -- Won't type check since 'B True' does not
 -- >                             -- have type 'Expr Int'!
 --
+
+-- | How to define an evaluator? Let see...
+eval :: Expr a -> a
+eval (I i) = i
+eval (B b) = b
+eval (Add e0 e1) = eval e0 + eval e1
+eval (Eq e0 e1) = eval e0 == eval e1
