@@ -47,14 +47,10 @@ data Elem list elt where
   EZ :: Elem (x ': xs) x
   ES :: Elem xs x -> Elem (y ': xs) x
 
--- | 'Elem xs x' seems to be describing how a type 'x' can be in a list of
--- types 'xs'.
+-- | 'Elem xs x' allows to *select* a type in a list of types.
 
--- | The first rule seems to say that 'x' is always an element of the
--- list @x ': xs@.
-
--- | The second "rule" says that if 'x' is an element of the list 'xs', then
--- 'x' is an element of the list (of types) @y ': xs@, but one element later.
+-- | The first constructor selects the first element in a list of types. The
+-- second one selects the next element.
 
 -- | To try this in the ghci REPL,
 --
@@ -66,6 +62,14 @@ data Elem list elt where
 --      ghci> :t EZ :: Elem '[Bool, Int] Int
 --
 -- and see what happens.
+--
+-- Also look at the types of the following expressions:
+--
+-- > ES EZ :: Elem (y : x : xs) x
+-- > ES (ES EZ) :: Elem (y : y1 : x : xs) x
+-- > ES (ES (ES EZ)) :: Elem (y : y1 : y2 : x : xs) x
+--
+
 
 -- | Now how could we use 'Elem' to write our get function?
 get :: Elem tys ty -> HList tys -> ty
