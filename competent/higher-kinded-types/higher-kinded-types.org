@@ -83,6 +83,16 @@
     #+BEGIN_SRC haskell
     type T1 = T F Maybe
     #+END_SRC
+
     The problem is that ~T~ expects as first argument something of kind ~* ->
-    *~ and we are passing ~F :: (* -> *) -> *~.  However, if we could have ~*~
-    to be a function (higher-kind), we could define ~T1~ above.
+    *~ and we are passing ~F :: (* -> *) -> *~. However, if we could have ~*~
+    to be a function (higher-kind), we could define ~T1~ above. The extensions
+    ~KindSignatures~ together with ~PolyKinds~ allow us to solve this problem.
+    Using these extensions we can define @T@ as follows:
+    #+BEGIN_SRC haskell
+    data T (f :: k -> *) a = MkT (f a)
+    #+END_SRC
+
+    Then we can pass  ~F :: (* -> *) -> *~ as argument to ~T~, since ~(* -> *)
+    -> *~ is compatible with kind ~k -> *~ (here ~k~ is ~* -> *~).
+    

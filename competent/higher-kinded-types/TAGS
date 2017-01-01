@@ -1,33 +1,0 @@
-
-./app/Main.hs,52
-module Main Main0,1
-main main2,3
-main main3,4
-
-./Setup.hs,15
-main main1,2
-
-./test/Spec.hs,30
-main main0,1
-main main1,2
-
-./src/HigherTrees.hs,277
-module HigherTrees HigherTrees2,3
-data Tree Tree4,5
-data Tree f a = Leaf Leaf4,5
-              | Tree Tree5,6
-data Pair Pair7,8
-data Pair a = MkPair MkPair7,8
-type BinTree BinTree9,10
-type BinTree a a9,10
-type RoseTree RoseTree10,11
-t0 t012,13
-t0 t013,14
-
-./src/WeedyKinds.hs,128
-module WeedyKinds WeedyKinds2,3
-data T T4,5
-data T f a = MkT MkT4,5
-type T0 T05,6
-data F F7,8
-data F f = MkF MkF7,8
