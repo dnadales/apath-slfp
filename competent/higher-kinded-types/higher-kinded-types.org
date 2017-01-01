@@ -1,0 +1,88 @@
+* Higher Kinded Types
+
+  Consider the following signature:
+  #+BEGIN_SRC haskell
+  f0 :: Maybe Int -> Maybe Bool
+  #+END_SRC
+
+  This will type check. However consider the following ones:
+  #+BEGIN_SRC haskell
+  f1 :: Maybe -> Int
+  f2 :: Either Int -> Maybe Int
+  #+END_SRC
+  The following won't compile: the compiler expects a type: something with kind
+  `*`, but we are giving something with kind `* -> *`.
+
+  Types and kinds allow us to classify:
+  - Types classify terms.
+  - Kinds classify types.
+
+    
+  Types prevent us from building nonsensical terms, e.g:
+  #+BEGIN_SRC haskell
+    True + 4
+  #+END_SRC
+  Kinds prevent us from building nonsensical types, e.g:
+  #+BEGIN_SRC haskell
+    Maybe Maybe
+  #+END_SRC
+  In the snippet above, the compiler will throw an error since ~Maybe~ has kind
+  ~* -> *~, so ~Maybe~ expects a type of kind ~*~ but we are passing a type
+  with kind ~* -> *~.
+
+  With type-kinds we can abstract over types:
+  #+BEGIN_SRC haskell
+    data RoseTree a = RLeaf a
+                    | RNode ([] (RoseTree a))
+
+    data BinTree a = BLeaf a
+                   | BNode (Pair (BinTree a))
+
+    data Pair a = MkPair a a
+  #+END_SRC
+  Note the similar pattern in the definitions of ~RoseTree~ and ~BinTree~. We
+  are repeating ourselves! We can abstract this as follows:
+  #+BEGIN_SRC haskell
+    data Tree f a = Leaf a
+                  | Tree (f (Tree f a))
+  #+END_SRC
+  If we ask for the kind of ~Tree~ we find the following:
+  #+BEGIN_SRC haskell
+    Tree :: (* -> *) -> * -> *
+  #+END_SRC
+  So ~f~ in the definition above must be a type with kind ~* -> *~. Using our
+  this generic definition can define ~RoseTree~ and ~BinTree~ in terms
+  of ~Tree~:
+  #+BEGIN_SRC haskell
+    data Pair a = MkPair a a
+
+    type BinTree a = Tree Pair a
+    type RoseTree a = Tree [] a
+
+    t0 :: BinTree String
+    t0 = Tree (MkPair (Leaf "foo") (Leaf "bar"))
+  #+END_SRC
+
+*** Kinds can be too weedy
+    Consider the following definition:
+    #+BEGIN_SRC haskell
+    data T f a = MkT (f a)
+    #+END_SRC
+    Here ~T~ has kind ~(* -> *) -> * -> *~. Since ~Maybe~ has kind ~* -> *~ and
+    ~Int :: *~ we can write:
+    #+BEGIN_SRC haskell
+    type T0 = T Maybe Int
+    #+END_SRC
+
+    Now consider the following ~data~ definition:
+    #+BEGIN_SRC haskell
+    data F f = MkF (f Int)
+    #+END_SRC
+    Here ~F~ has kind ~(* -> *) -> *~. The kind restrictions prevent us from
+    writing:
+    #+BEGIN_SRC haskell
+    type T1 = T F Maybe
+    #+END_SRC
+    The problem is that ~T~ expects as first argument something of kind ~* ->
+    *~ and we are passing ~F :: (* -> *) -> *~.  However, if we could have ~*~
+    to be a function (higher-kind), we could define ~T1~ above.
